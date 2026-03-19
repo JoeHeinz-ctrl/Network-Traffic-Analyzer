@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard - Network Traffic Analysis</title>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard-header">
+            <div>
+                <div class="logo">
+                    <div class="logo-icon">NT</div>
+                </div>
+                <h1>Analytics Dashboard</h1>
+                <p class="subtitle" id="dashboardSubtitle">Real-time Mathematical Analysis & Anomaly Detection</p>
+            </div>
+            <a href="/" class="nav-link">← Upload New Data</a>
+        </div>
+        
+        <div id="dataStatusBanner" class="data-status-banner hidden">
+            <div class="status-content">
+                <div class="status-icon">📊</div>
+                <div class="status-text">
+                    <div class="status-title">Using Sample Data</div>
+                    <div class="status-description">Upload your own CSV file to analyze real network traffic data</div>
+                </div>
+                <a href="/" class="status-action">Upload Data</a>
+            </div>
+        </div>
+        
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-label">Total Traffic Records</div>
+                <div class="stat-value" id="totalRecords">-</div>
+                <div class="stat-change positive">↑ Live Data</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Anomalies Detected</div>
+                <div class="stat-value" id="anomalyCount">-</div>
+                <div class="stat-change negative" id="anomalyChange">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Model Accuracy (R²)</div>
+                <div class="stat-value" id="modelAccuracy">-</div>
+                <div class="stat-change positive">Least Squares</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">PCA Variance</div>
+                <div class="stat-value" id="pcaVariance">-</div>
+                <div class="stat-change positive">2 Components</div>
+            </div>
+        </div>
+        
+        <div class="charts-grid">
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3>🌊 Traffic Over Time (PDE Smoothing)</h3>
+                    <span class="chart-badge">CO1</span>
+                </div>
+                <div id="traffic-chart" style="height: 400px;"></div>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3>🔥 Traffic Intensity Heatmap</h3>
+                    <span class="chart-badge">CO1</span>
+                </div>
+                <div id="heatmap-chart" style="height: 400px;"></div>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3>🎯 PCA 2D Projection</h3>
+                    <span class="chart-badge">CO3</span>
+                </div>
+                <div id="pca-chart" style="height: 400px;"></div>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3>📡 Frequency Spectrum (FFT)</h3>
+                    <span class="chart-badge">CO4</span>
+                </div>
+                <div id="frequency-chart" style="height: 400px;"></div>
+            </div>
+            
+            <div class="chart-container full-width">
+                <div class="chart-header">
+                    <h3>⚠️ Anomaly Detection (Least Squares)</h3>
+                    <span class="chart-badge">CO5</span>
+                </div>
+                <div id="anomaly-chart" style="height: 450px;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/static/charts.js"></script>
+</body>
+</html>

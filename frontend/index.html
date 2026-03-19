@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Traffic Analysis - Advanced Mathematical Analytics</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">NT</div>
+            </div>
+            <h1>Network Traffic Analysis</h1>
+            <p class="subtitle">Advanced Mathematical Methods for Anomaly Detection</p>
+            <span class="badge">🔬 Research-Grade Analytics</span>
+        </div>
+        
+        <div class="upload-section">
+            <h2>Upload Network Traffic Data</h2>
+            <p class="subtitle">CSV format with timestamp, source_ip, destination_ip, packet_size, protocol</p>
+            <input type="file" id="csvFile" accept=".csv" onchange="handleFileSelection()">
+            <label for="csvFile" class="file-upload-label">📁 Choose CSV File</label>
+            <div id="fileInfo" class="file-info hidden"></div>
+            <br>
+            <button onclick="uploadFile()" id="uploadBtn" disabled>🚀 Analyze Traffic</button>
+            <div id="uploadMessage"></div>
+        </div>
+        
+        <div class="instructions">
+            <h3>📚 Mathematical Analysis Pipeline</h3>
+            <ul>
+                <li><strong>CO1 - PDE Smoothing:</strong> Gaussian filtering for noise reduction using diffusion equations</li>
+                <li><strong>CO2 - Linear Transformations:</strong> Min-max normalization and feature scaling</li>
+                <li><strong>CO3 - PCA:</strong> Dimensionality reduction to 2D principal components</li>
+                <li><strong>CO4 - FFT Analysis:</strong> Frequency domain analysis for burst detection</li>
+                <li><strong>CO5 - Least Squares:</strong> Linear regression for anomaly baseline prediction</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        let progressInterval;
+        
+        function handleFileSelection() {
+            const fileInput = document.getElementById('csvFile');
+            const fileInfo = document.getElementById('fileInfo');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const fileLabel = document.querySelector('.file-upload-label');
+            
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const fileSize = (file.size / 1024 / 1024).toFixed(2);
+                const fileName = file.name;
+                
+                // Update file info display
+                fileInfo.innerHTML = `
+                    <div class="file-selected">
+                        <div class="file-icon">📄</div>
+                        <div class="file-details">
+                            <div class="file-name">${fileName}</div>
+                            <div class="file-meta">
+                                <span class="file-size">${fileSize} MB</span>
+                                <span class="file-status">✅ Ready to analyze</span>
+                            </div>
+                        </div>
+                        <div class="file-actions">
+                            <button class="remove-file" onclick="clearFileSelection()">✕</button>
+                        </div>
+                    </div>
+                `;
+                
+                // Show file info and enable upload button
+                fileInfo.classList.remove('hidden');
+                uploadBtn.disabled = false;
+                uploadBtn.classList.add('enabled');
+                
+                // Update label text
+                fileLabel.innerHTML = '📁 Change File';
+                fileLabel.classList.add('file-selected-label');
+            }
+        }
+        
+        function clearFileSelection() {
+            const fileInput = document.getElementById('csvFile');
+            const fileInfo = document.getElementById('fileInfo');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const fileLabel = document.querySelector('.file-upload-label');
+            
+            // Clear file input
+            fileInput.value = '';
+            
+            // Hide file info and disable upload button
+            fileInfo.classList.add('hidden');
+            uploadBtn.disabled = true;
+            uploadBtn.classList.remove('enabled');
+            
+            // Reset label text
+            fileLabel.innerHTML = '📁 Choose CSV File';
+            fileLabel.classList.remove('file-selected-label');
+        }
+        
+        function updateProgress(message, percentage = null) {
+            const messageDiv = document.getElementById('uploadMessage');
+            const progressHtml = percentage !== null 
+                ? `<div class="progress-container">
+                     <div class="progress-bar">
+                       <div class="progress-fill" style="width: ${percentage}%"></div>
+                     </div>
+                     <div class="progress-text">${percentage}%</div>
+                   </div>`
+                : '';
+            
+            messageDiv.innerHTML = `
+                <div class="message processing">
+                    <div class="spinner"></div>
+                    <div class="progress-content">
+                        <div class="progress-message">${message}</div>
+                        ${progressHtml}
+                    </div>
+                </div>
+            `;
+        }
+        
+        function simulateAnalysisProgress() {
+            const steps = [
+                { message: "📊 Parsing CSV structure and validating columns...", duration: 1000 },
+                { message: "� Extracting traffic features (packet_size, protocol, timestamps)...", duration: 1500 },
+                { message: "🧮 Applying linear transformations and normalization...", duration: 1200 },
+                { message: "🌊 Computing PDE smoothing with Gaussian filtering...", duration: 1800 },
+                { message: "🎯 Performing PCA dimensionality reduction...", duration: 1400 },
+                { message: "📡 Running FFT frequency analysis...", duration: 1600 },
+                { message: "📈 Fitting least squares regression model...", duration: 1300 },
+                { message: "⚠️ Detecting anomalies using statistical thresholds...", duration: 1100 },
+                { message: "📋 Generating visualization data structures...", duration: 800 },
+                { message: "✅ Analysis complete! Preparing dashboard...", duration: 500 }
+            ];
+            
+            let currentStep = 0;
+            const totalSteps = steps.length;
+            
+            function runNextStep() {
+                if (currentStep < totalSteps) {
+                    const step = steps[currentStep];
+                    const percentage = Math.round(((currentStep + 1) / totalSteps) * 100);
+                    updateProgress(step.message, percentage);
+                    
+                    setTimeout(() => {
+                        currentStep++;
+                        runNextStep();
+                    }, step.duration);
+                } else {
+                    // Analysis complete
+                    document.getElementById('uploadMessage').innerHTML = 
+                        '<div class="message success">🎉 Mathematical analysis completed successfully!</div>';
+                    setTimeout(() => window.location.href = '/dashboard.html', 1000);
+                }
+            }
+            
+            runNextStep();
+        }
+        
+        async function uploadFile() {
+            const fileInput = document.getElementById('csvFile');
+            const messageDiv = document.getElementById('uploadMessage');
+            
+            if (!fileInput.files.length) {
+                messageDiv.innerHTML = '<div class="message error">⚠️ Please select a CSV file</div>';
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            // Show initial upload progress
+            updateProgress(`📤 Uploading ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)...`, 0);
+            
+            try {
+                // Simulate upload progress
+                let uploadProgress = 0;
+                const uploadInterval = setInterval(() => {
+                    uploadProgress += Math.random() * 15;
+                    if (uploadProgress > 95) uploadProgress = 95;
+                    updateProgress(`📤 Uploading ${file.name}...`, Math.round(uploadProgress));
+                }, 200);
+                
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                clearInterval(uploadInterval);
+                updateProgress("📤 Upload complete! Processing data...", 100);
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Start analysis simulation
+                    setTimeout(() => {
+                        updateProgress("🔬 Initializing mathematical analysis pipeline...", 0);
+                        setTimeout(simulateAnalysisProgress, 800);
+                    }, 500);
+                } else {
+                    messageDiv.innerHTML = `<div class="message error">❌ Error: ${data.message}</div>`;
+                }
+            } catch (error) {
+                messageDiv.innerHTML = `<div class="message error">❌ Upload failed: ${error.message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>
