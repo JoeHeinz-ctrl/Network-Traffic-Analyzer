@@ -20,8 +20,6 @@ app = FastAPI(title="Network Traffic Analysis")
 traffic_data: Optional[pd.DataFrame] = None
 analysis_cache = {}
 
-app.mount("/static", StaticFiles(directory="frontend"), name="static")
-
 @app.get("/")
 async def root():
     return FileResponse("frontend/index.html")
@@ -29,6 +27,14 @@ async def root():
 @app.get("/dashboard.html")
 async def dashboard():
     return FileResponse("frontend/dashboard.html")
+
+@app.get("/style.css")
+async def get_css():
+    return FileResponse("frontend/style.css", media_type="text/css")
+
+@app.get("/charts.js")
+async def get_charts_js():
+    return FileResponse("frontend/charts.js", media_type="application/javascript")
 
 @app.post("/upload")
 async def upload_csv(file: UploadFile = File(...)):
@@ -269,6 +275,9 @@ async def get_anomalies():
     except Exception as e:
         logger.error(f"Anomaly detection error: {e}")
         return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
+
+# Mount static files AFTER all routes are defined
+app.mount("/static", StaticFiles(directory="frontend"), name="static")
 
 if __name__ == "__main__":
     import uvicorn
