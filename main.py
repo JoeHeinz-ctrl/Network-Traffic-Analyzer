@@ -30,11 +30,33 @@ async def dashboard():
 
 @app.get("/style.css")
 async def get_css():
-    return FileResponse("frontend/style.css", media_type="text/css")
+    from fastapi.responses import Response
+    with open("frontend/style.css", "r", encoding="utf-8") as f:
+        content = f.read()
+    return Response(
+        content=content,
+        media_type="text/css",
+        headers={
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0"
+        }
+    )
 
 @app.get("/charts.js")
 async def get_charts_js():
-    return FileResponse("frontend/charts.js", media_type="application/javascript")
+    from fastapi.responses import Response
+    with open("frontend/charts.js", "r", encoding="utf-8") as f:
+        content = f.read()
+    return Response(
+        content=content,
+        media_type="application/javascript",
+        headers={
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0"
+        }
+    )
 
 @app.post("/upload")
 async def upload_csv(file: UploadFile = File(...)):

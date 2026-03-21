@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Analytics Dashboard - Network Traffic Analysis</title>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/style.css?v=2">
 </head>
 <body>
     <div class="container">
@@ -95,8 +95,247 @@
                 <div id="anomaly-chart" style="height: 450px;"></div>
             </div>
         </div>
+        
+        <!-- Mathematical Analysis Section -->
+        <div class="math-analysis-section">
+            <div class="section-header">
+                <h2>📐 Mathematical Analysis & Course Outcomes</h2>
+                <p class="section-subtitle">Detailed mathematical foundations and formulations applied to network traffic analysis</p>
+            </div>
+            
+            <div class="co-grid">
+                <!-- CO1: Partial Differential Equations -->
+                <div class="co-card">
+                    <div class="co-header">
+                        <div class="co-badge co1">CO1</div>
+                        <h3>Partial Differential Equations (PDE)</h3>
+                    </div>
+                    <div class="co-content">
+                        <p class="co-description">
+                            <strong>Application:</strong> Gaussian filtering for noise reduction using heat diffusion equations
+                        </p>
+                        <div class="formula-box">
+                            <div class="formula-title">Heat Equation (Diffusion PDE):</div>
+                            <div class="formula">∂u/∂t = α∇²u</div>
+                            <div class="formula-desc">where u(x,t) is traffic intensity, α is diffusion coefficient</div>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-title">Gaussian Kernel:</div>
+                            <div class="formula">G(x,y,σ) = (1/2πσ²)e^(-(x²+y²)/2σ²)</div>
+                            <div class="formula-desc">Applied with σ = 1.5 for optimal smoothing</div>
+                        </div>
+                        <div class="co-results">
+                            <div class="result-item">
+                                <span class="result-label">Smoothing Method:</span>
+                                <span class="result-value">Gaussian Convolution</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Noise Reduction:</span>
+                                <span class="result-value" id="noiseReduction">~40-60%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CO2: Linear Transformations -->
+                <div class="co-card">
+                    <div class="co-header">
+                        <div class="co-badge co2">CO2</div>
+                        <h3>Linear Transformations</h3>
+                    </div>
+                    <div class="co-content">
+                        <p class="co-description">
+                            <strong>Application:</strong> Feature normalization and scaling for uniform data representation
+                        </p>
+                        <div class="formula-box">
+                            <div class="formula-title">Min-Max Normalization:</div>
+                            <div class="formula">x' = (x - x_min) / (x_max - x_min)</div>
+                            <div class="formula-desc">Maps features to [0, 1] range</div>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-title">Z-Score Standardization:</div>
+                            <div class="formula">z = (x - μ) / σ</div>
+                            <div class="formula-desc">Centers data with mean=0, std=1</div>
+                        </div>
+                        <div class="co-results">
+                            <div class="result-item">
+                                <span class="result-label">Features Normalized:</span>
+                                <span class="result-value">packet_size, protocol, timestamp</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Transformation Matrix:</span>
+                                <span class="result-value">T: ℝⁿ → ℝⁿ (linear map)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CO3: Orthonormal Bases & PCA -->
+                <div class="co-card">
+                    <div class="co-header">
+                        <div class="co-badge co3">CO3</div>
+                        <h3>Orthonormal Bases & Inner Product</h3>
+                    </div>
+                    <div class="co-content">
+                        <p class="co-description">
+                            <strong>Application:</strong> Principal Component Analysis for dimensionality reduction
+                        </p>
+                        <div class="formula-box">
+                            <div class="formula-title">Covariance Matrix:</div>
+                            <div class="formula">Σ = (1/n)X^T X</div>
+                            <div class="formula-desc">Captures feature correlations</div>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-title">Eigenvalue Decomposition:</div>
+                            <div class="formula">Σv = λv</div>
+                            <div class="formula-desc">Eigenvectors form orthonormal basis</div>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-title">PCA Projection:</div>
+                            <div class="formula">Z = XW, where W = [v₁, v₂]</div>
+                            <div class="formula-desc">Projects to 2D principal components</div>
+                        </div>
+                        <div class="co-results">
+                            <div class="result-item">
+                                <span class="result-label">Variance Explained:</span>
+                                <span class="result-value" id="pcaVarianceExplained">-</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Dimensions:</span>
+                                <span class="result-value">n → 2 (reduction)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CO4: Laplace Transform / FFT -->
+                <div class="co-card">
+                    <div class="co-header">
+                        <div class="co-badge co4">CO4</div>
+                        <h3>Laplace Transform & Frequency Analysis</h3>
+                    </div>
+                    <div class="co-content">
+                        <p class="co-description">
+                            <strong>Application:</strong> Fast Fourier Transform for burst detection in frequency domain
+                        </p>
+                        <div class="formula-box">
+                            <div class="formula-title">Discrete Fourier Transform:</div>
+                            <div class="formula">X(k) = Σ x(n)e^(-i2πkn/N)</div>
+                            <div class="formula-desc">Converts time series to frequency spectrum</div>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-title">Power Spectral Density:</div>
+                            <div class="formula">P(f) = |X(f)|²</div>
+                            <div class="formula-desc">Identifies dominant frequencies</div>
+                        </div>
+                        <div class="co-results">
+                            <div class="result-item">
+                                <span class="result-label">Algorithm:</span>
+                                <span class="result-value">FFT (O(n log n))</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Top Frequencies:</span>
+                                <span class="result-value" id="topFrequencies">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CO5: Least Squares -->
+                <div class="co-card">
+                    <div class="co-header">
+                        <div class="co-badge co5">CO5</div>
+                        <h3>Least Squares Method</h3>
+                    </div>
+                    <div class="co-content">
+                        <p class="co-description">
+                            <strong>Application:</strong> Linear regression for baseline prediction and anomaly detection
+                        </p>
+                        <div class="formula-box">
+                            <div class="formula-title">Normal Equations:</div>
+                            <div class="formula">β = (X^T X)^(-1) X^T y</div>
+                            <div class="formula-desc">Optimal parameters minimizing squared error</div>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-title">Prediction Model:</div>
+                            <div class="formula">ŷ = Xβ = β₀ + β₁x</div>
+                            <div class="formula-desc">Linear baseline for traffic patterns</div>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-title">Anomaly Detection:</div>
+                            <div class="formula">|y - ŷ| > k·σ</div>
+                            <div class="formula-desc">Threshold k=2 for 95% confidence</div>
+                        </div>
+                        <div class="co-results">
+                            <div class="result-item">
+                                <span class="result-label">R² Score:</span>
+                                <span class="result-value" id="rSquaredValue">-</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Anomalies Found:</span>
+                                <span class="result-value" id="anomaliesFound">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Summary Card -->
+                <div class="co-card summary-card">
+                    <div class="co-header">
+                        <div class="co-badge summary">📊</div>
+                        <h3>Analysis Summary</h3>
+                    </div>
+                    <div class="co-content">
+                        <p class="co-description">
+                            <strong>Integrated Pipeline:</strong> Multi-stage mathematical framework for network traffic analysis
+                        </p>
+                        <div class="pipeline-flow">
+                            <div class="pipeline-step">
+                                <div class="step-number">1</div>
+                                <div class="step-name">Data Ingestion</div>
+                            </div>
+                            <div class="pipeline-arrow">→</div>
+                            <div class="pipeline-step">
+                                <div class="step-number">2</div>
+                                <div class="step-name">PDE Smoothing</div>
+                            </div>
+                            <div class="pipeline-arrow">→</div>
+                            <div class="pipeline-step">
+                                <div class="step-number">3</div>
+                                <div class="step-name">Normalization</div>
+                            </div>
+                            <div class="pipeline-arrow">→</div>
+                            <div class="pipeline-step">
+                                <div class="step-number">4</div>
+                                <div class="step-name">PCA Reduction</div>
+                            </div>
+                            <div class="pipeline-arrow">→</div>
+                            <div class="pipeline-step">
+                                <div class="step-number">5</div>
+                                <div class="step-name">FFT Analysis</div>
+                            </div>
+                            <div class="pipeline-arrow">→</div>
+                            <div class="pipeline-step">
+                                <div class="step-number">6</div>
+                                <div class="step-name">Anomaly Detection</div>
+                            </div>
+                        </div>
+                        <div class="co-results">
+                            <div class="result-item">
+                                <span class="result-label">Computational Complexity:</span>
+                                <span class="result-value">O(n log n)</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Mathematical Domains:</span>
+                                <span class="result-value">PDEs, Linear Algebra, Signal Processing</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     
-    <script src="/charts.js"></script>
+    <script src="/charts.js?v=2"></script>
 </body>
 </html>

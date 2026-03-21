@@ -495,3 +495,42 @@ async function loadAnomalyVisualization() {
 }
 
 document.addEventListener('DOMContentLoaded', loadAllVisualizations);
+
+// Update mathematical analysis section with computed values
+async function updateMathematicalAnalysis() {
+    try {
+        // Fetch all analysis data
+        const [pcaResponse, freqResponse, anomalyResponse] = await Promise.all([
+            fetch('/pca'),
+            fetch('/frequency'),
+            fetch('/anomalies')
+        ]);
+        
+        if (pcaResponse.ok) {
+            const pcaData = await pcaResponse.json();
+            const totalVariance = ((pcaData.explained_variance[0] + pcaData.explained_variance[1]) * 100).toFixed(1);
+            document.getElementById('pcaVarianceExplained').textContent = `${totalVariance}% (PC1: ${(pcaData.explained_variance[0]*100).toFixed(1)}%, PC2: ${(pcaData.explained_variance[1]*100).toFixed(1)}%)`;
+        }
+        
+        if (freqResponse.ok) {
+            const freqData = await freqResponse.json();
+            const topFreqs = freqData.top_5_frequencies.slice(0, 3).map(f => f.toFixed(3)).join(', ');
+            document.getElementById('topFrequencies').textContent = `${topFreqs} Hz`;
+        }
+        
+        if (anomalyResponse.ok) {
+            const anomalyData = await anomalyResponse.json();
+            document.getElementById('rSquaredValue').textContent = anomalyData.r_squared.toFixed(4);
+            document.getElementById('anomaliesFound').textContent = `${anomalyData.total_count} (${anomalyData.threshold}σ threshold)`;
+        }
+    } catch (error) {
+        console.error('Error updating mathematical analysis:', error);
+    }
+}
+
+// Call this after all visualizations are loaded
+document.addEventListener('DOMContentLoaded', () => {
+    loadAllVisualizations().then(() => {
+        updateMathematicalAnalysis();
+    });
+});
