@@ -1,124 +1,184 @@
-# Network Traffic Flow Analysis and Anomaly Detection
+# Network Traffic Analysis
 
-A localhost Python web application demonstrating mathematical methods applied to network traffic analysis and anomaly detection. Built with FastAPI and interactive Plotly visualizations.
+Advanced Mathematical Methods for Anomaly Detection using PDEs, Linear Algebra, PCA, FFT, and Least Squares
 
-## Mathematical Concepts
+## 🚀 Quick Start
 
-### CO1 - Partial Differential Equations (PDE Smoothing)
-Applies diffusion equation approximation using Gaussian filtering to remove noise from traffic data. The diffusion equation ∂u/∂t = α∇²u describes how values spread over time, approximated numerically via Gaussian convolution.
+### Prerequisites
+- Python 3.8 or higher
+- pip (Python package manager)
 
-### CO2 - Linear Transformations
-Treats traffic features as vectors and performs transformations including normalization and scaling using NumPy matrix operations. Min-max scaling transforms all features to [0, 1] range.
+### Installation
 
-### CO3 - Orthonormal Bases / Dimensionality Reduction
-Uses Principal Component Analysis (PCA) to reduce high-dimensional traffic features to 2 principal components for 2D visualization. PCA finds orthonormal basis vectors that maximize variance.
+1. **Navigate to the project directory:**
+```bash
+cd D:\Acc\Projects\Maths
+```
 
-### CO4 - Laplace Transform / Frequency Analysis
-Analyzes frequency components of network traffic using Fast Fourier Transform (FFT). Treats traffic as a discrete time signal to detect burst patterns and periodic behavior.
-
-### CO5 - Least Squares Prediction
-Uses linear regression based on least squares method to predict expected traffic values. Deviations exceeding 2 standard deviations from predictions are marked as anomalies.
-
-## Features
-
-- **CSV Upload**: Upload network traffic logs with columns: timestamp, source_ip, destination_ip, packet_size, protocol
-- **PDE Smoothing**: Apply Gaussian filtering to remove noise
-- **PCA Visualization**: 2D projection of high-dimensional traffic features
-- **Frequency Analysis**: FFT-based detection of dominant frequencies
-- **Anomaly Detection**: Statistical detection using least squares regression
-- **Interactive Dashboards**: Plotly-based visualizations
-- **Sample Data**: Automatic generation of realistic traffic data
-
-## Installation
-
-1. Clone or download the project
-2. Install dependencies:
+2. **Install dependencies:**
 ```bash
 pip install -r requirements.txt
 ```
 
-## Running the Application
+### Running the Application
 
-Start the FastAPI server:
+**Start the server:**
 ```bash
-uvicorn main:app --host 127.0.0.1 --port 8000 --reload
+python main.py
 ```
 
-Then open your browser to:
+The server will start on `http://127.0.0.1:8001`
+
+**Access the application:**
+- Open your browser and go to: **http://127.0.0.1:8001/**
+- Or directly to dashboard: **http://127.0.0.1:8001/dashboard.html**
+
+**Stop the server:**
+- Press `Ctrl + C` in the terminal
+
+---
+
+## 📊 Mathematical Analysis Pipeline
+
+### CO1 - PDE Smoothing
+Gaussian filtering for noise reduction using diffusion equations
+- **Heat Equation:** ∂u/∂t = α∇²u
+- **Gaussian Kernel:** G(x,y,σ) = (1/2πσ²)e^(-(x²+y²)/2σ²)
+- **Visualizations:** Traffic Over Time, Traffic Intensity Heatmap
+
+### CO2 - Linear Transformations
+Feature normalization and scaling for uniform data representation
+- **Min-Max Normalization:** x' = (x - x_min) / (x_max - x_min)
+- **Z-Score Standardization:** z = (x - μ) / σ
+- **Visualization:** Before/After Normalization Comparison
+
+### CO3 - PCA (Principal Component Analysis)
+Dimensionality reduction to 2D principal components
+- **Covariance Matrix:** Σ = (1/n)X^T X
+- **Eigenvalue Decomposition:** Σv = λv
+- **PCA Projection:** Z = XW
+- **Visualization:** 2D PCA Projection
+
+### CO4 - FFT Analysis
+Frequency domain analysis for burst detection
+- **Discrete Fourier Transform:** X(k) = Σ x(n)e^(-i2πkn/N)
+- **Power Spectral Density:** P(f) = |X(f)|²
+- **Visualization:** Frequency Spectrum
+
+### CO5 - Least Squares
+Linear regression for anomaly baseline prediction
+- **Normal Equations:** β = (X^T X)^(-1) X^T y
+- **Prediction Model:** ŷ = Xβ
+- **Anomaly Detection:** |y - ŷ| > k·σ (k=2 for 95% confidence)
+- **Visualization:** Anomaly Detection Chart
+
+---
+
+## 📁 Project Structure
+
 ```
-http://127.0.0.1:8000
+Maths/
+├── main.py                      # FastAPI server (port 8001)
+├── requirements.txt             # Python dependencies
+├── analysis/                    # Analysis modules
+│   ├── preprocessing.py         # CSV parsing, normalization
+│   ├── pde_smoothing.py         # Gaussian filtering
+│   ├── pca_analysis.py          # PCA dimensionality reduction
+│   ├── laplace_analysis.py      # FFT frequency analysis
+│   ├── least_squares.py         # Linear regression
+│   └── anomaly_detection.py     # Anomaly detection
+├── frontend/                    # Web interface
+│   ├── index.html               # Upload page
+│   ├── dashboard_fixed.html     # Analytics dashboard
+│   ├── style.css                # Styling
+│   └── charts.js                # Plotly visualizations
+└── data/                        # Sample datasets
+    ├── sample_network_traffic.csv
+    └── test_network_traffic_5mb.csv
 ```
 
-## Usage
+---
 
-1. **Upload Data**: Go to the landing page and upload a CSV file with network traffic logs
-2. **View Dashboard**: Click "View Dashboard" to see all visualizations
-3. **Analyze**: The system automatically applies all mathematical analyses
-4. **Interpret Results**: 
-   - Traffic chart shows original and PDE-smoothed data
-   - PCA chart shows 2D projection of traffic features
-   - Frequency chart shows dominant frequencies
-   - Anomaly chart highlights unusual traffic patterns
+## 📝 Usage
 
-## CSV Format
+1. **Start the server:**
+   ```bash
+   python main.py
+   ```
 
-Required columns:
-- `timestamp`: ISO 8601 format (e.g., "2024-01-15T10:30:00")
-- `source_ip`: IPv4 address (e.g., "192.168.1.100")
-- `destination_ip`: IPv4 address (e.g., "10.0.0.50")
-- `packet_size`: Integer bytes (64-1500)
-- `protocol`: "TCP", "UDP", or "ICMP"
+2. **Open browser:**
+   Navigate to `http://127.0.0.1:8001/`
 
-## API Endpoints
+3. **Upload CSV file:**
+   - Required columns: `timestamp`, `source_ip`, `destination_ip`, `packet_size`, `protocol`
+   - Format: CSV with headers
 
-- `POST /upload` - Upload CSV file
-- `GET /visualize` - Get traffic visualization data
-- `GET /pca` - Get PCA analysis results
-- `GET /frequency` - Get FFT frequency spectrum
-- `GET /anomalies` - Get detected anomalies
+4. **View analysis:**
+   - Automatic redirect to dashboard after upload
+   - All 5 mathematical analyses applied automatically
+   - Interactive Plotly charts for each CO
 
-## Anomaly Detection
+---
 
-Anomalies are detected using statistical deviation from predicted values:
-1. Fit linear regression model to traffic data
-2. Calculate residuals (actual - predicted)
-3. Compute standard deviation of residuals
-4. Mark records as anomalies if |residual| > 2 × std_dev
+## 🔧 Troubleshooting
 
-## Project Structure
-
-```
-network-traffic-analysis/
-├── main.py                          # FastAPI application
-├── requirements.txt                 # Python dependencies
-├── README.md                        # This file
-├── analysis/                        # Analysis modules
-│   ├── preprocessing.py             # CSV parsing, normalization
-│   ├── pde_smoothing.py             # Gaussian filtering
-│   ├── pca_analysis.py              # PCA dimensionality reduction
-│   ├── laplace_analysis.py          # FFT frequency analysis
-│   ├── least_squares.py             # Linear regression
-│   └── anomaly_detection.py         # Anomaly detection
-├── frontend/                        # Frontend files
-│   ├── index.html                   # Landing page
-│   ├── dashboard.html               # Visualization dashboard
-│   ├── charts.js                    # Plotly rendering
-│   └── style.css                    # Styling
-└── data/                            # Data directory
-    └── sample_network_traffic.csv   # Sample data
+### Port already in use
+If port 8001 is busy, edit `main.py` (last line):
+```python
+uvicorn.run(app, host="127.0.0.1", port=8002)  # Change port number
 ```
 
-## Technologies
+### Module not found error
+```bash
+pip install -r requirements.txt
+```
 
-- **Backend**: FastAPI, Uvicorn
-- **Data Processing**: NumPy, Pandas, SciPy, scikit-learn
-- **Visualization**: Plotly
-- **Frontend**: HTML5, CSS3, JavaScript
+### Browser shows old version
+Hard refresh: `Ctrl + Shift + R` (Windows) or `Cmd + Shift + R` (Mac)
 
-## Notes
+### Server won't start
+Make sure you're in the correct directory:
+```bash
+cd D:\Acc\Projects\Maths
+python main.py
+```
 
-- Application runs entirely on localhost (127.0.0.1:8000)
-- No database required - data stored in memory
-- Sample data automatically generated if no CSV uploaded
-- All mathematical operations use NumPy for efficiency
-- Suitable for classroom demonstrations and educational purposes
+---
+
+## 🎓 Research-Grade Analytics
+
+This project implements advanced mathematical methods for network traffic anomaly detection, suitable for:
+- Academic research and coursework
+- Network security analysis
+- Traffic pattern recognition
+- Anomaly detection demonstrations
+
+## 🛠️ Technologies
+
+- **Backend:** FastAPI, Uvicorn
+- **Data Processing:** NumPy, Pandas, SciPy, scikit-learn
+- **Visualization:** Plotly.js
+- **Frontend:** HTML5, CSS3, JavaScript
+
+---
+
+## 📊 CSV Format Example
+
+```csv
+timestamp,source_ip,destination_ip,packet_size,protocol
+2024-01-15T10:30:00,192.168.1.100,10.0.0.50,1024,TCP
+2024-01-15T10:30:01,192.168.1.101,10.0.0.51,512,UDP
+2024-01-15T10:30:02,192.168.1.102,10.0.0.52,256,ICMP
+```
+
+---
+
+## 🚀 Every Time You Want to Run:
+
+1. Open terminal/command prompt
+2. Navigate to project: `cd D:\Acc\Projects\Maths`
+3. Run: `python main.py`
+4. Open browser: `http://127.0.0.1:8001/`
+5. Stop server: `Ctrl + C`
+
+That's it! 🎉
