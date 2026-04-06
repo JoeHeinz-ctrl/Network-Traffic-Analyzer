@@ -1,5 +1,5 @@
 from fastapi import FastAPI, UploadFile, File
-from fastapi.responses import JSONResponse, FileResponse
+from fastapi.responses import JSONResponse, FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 import pandas as pd
 import numpy as np
@@ -26,11 +26,228 @@ async def root():
 
 @app.get("/dashboard.html")
 async def dashboard():
-    return FileResponse("frontend/dashboard.html")
+    return FileResponse("frontend/dashboard_fixed.html")
+
+@app.get("/unified_theme.css")
+async def get_unified_theme():
+    with open("frontend/unified_theme.css", "r", encoding="utf-8") as f:
+        content = f.read()
+    return Response(
+        content=content,
+        media_type="text/css",
+        headers={
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0"
+        }
+    )
 
 @app.get("/style.css")
 async def get_css():
-    from fastapi.responses import Response
+    # Serve original style + CO layout fixes only
+    with open("frontend/style.css", "r", encoding="utf-8") as f:
+        original = f.read()
+    
+    # Add only the CO layout CSS
+    co_layout_css = """
+/* CO1: Side-by-side layout */
+.co-section {
+    background: #1e293b;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 40px;
+}
+
+.co-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid rgba(99, 102, 241, 0.2);
+}
+
+.co-badge {
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.co-header h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+/* CO1 Horizontal Layout */
+.co-layout-horizontal {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 24px;
+}
+
+.math-panel-left {
+    background: #334155;
+    border-radius: 16px;
+    padding: 28px;
+}
+
+.math-panel-left h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 16px;
+}
+
+.math-panel-left p {
+    color: #cbd5e1;
+    margin-bottom: 20px;
+}
+
+.charts-panel-right {
+    display: grid;
+    gap: 20px;
+}
+
+/* CO2 Vertical Layout */
+.co-layout-vertical {
+    display: block;
+}
+
+.math-panel-top {
+    background: #334155;
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 24px;
+}
+
+.math-panel-top h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 16px;
+}
+
+.formulas-horizontal {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+.charts-panel-bottom {
+    margin-top: 24px;
+}
+
+.formula-card {
+    background: #1e293b;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+}
+
+.formula-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #818cf8;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.formula-text {
+    font-family: 'Courier New', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.formula-note {
+    font-size: 13px;
+    color: #cbd5e1;
+}
+
+.results-box, .results-box-horizontal {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid rgba(99, 102, 241, 0.2);
+}
+
+.result-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+.result-row span {
+    color: #94a3b8;
+}
+
+.result-row strong {
+    color: #fff;
+    font-family: 'Courier New', monospace;
+}
+
+.chart-box {
+    background: #334155;
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.chart-box h4 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 16px;
+}
+
+.chart-area {
+    min-height: 400px;
+}
+
+@media (max-width: 1200px) {
+    .co-layout-horizontal {
+        grid-template-columns: 1fr;
+    }
+    .formulas-horizontal {
+        grid-template-columns: 1fr;
+    }
+}
+"""
+    
+    return Response(
+        content=original + "\n\n" + co_layout_css,
+        media_type="text/css",
+        headers={
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0"
+        }
+    )
+
+@app.get("/theme.js")
+async def get_theme_js():
+    with open("frontend/theme.js", "r", encoding="utf-8") as f:
+        content = f.read()
+    return Response(
+        content=content,
+        media_type="application/javascript",
+        headers={
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0"
+        }
+    )
+
+@app.get("/style.css")
+async def get_css():
     with open("frontend/style.css", "r", encoding="utf-8") as f:
         content = f.read()
     return Response(
@@ -45,7 +262,6 @@ async def get_css():
 
 @app.get("/charts.js")
 async def get_charts_js():
-    from fastapi.responses import Response
     with open("frontend/charts.js", "r", encoding="utf-8") as f:
         content = f.read()
     return Response(
@@ -244,6 +460,41 @@ async def get_frequency_analysis():
         logger.error(f"Frequency analysis error: {e}")
         return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
 
+@app.get("/normalization")
+async def get_normalization_visualization():
+    try:
+        logger.info("Starting normalization visualization...")
+        data = ensure_data_loaded()
+        
+        # Get original packet sizes
+        original = data['packet_size'].values[:100]  # First 100 points
+        
+        # Min-Max Normalization
+        min_val = original.min()
+        max_val = original.max()
+        normalized = (original - min_val) / (max_val - min_val)
+        
+        # Z-Score Standardization
+        mean_val = original.mean()
+        std_val = original.std()
+        standardized = (original - mean_val) / std_val
+        
+        return {
+            "original": original.tolist(),
+            "normalized": normalized.tolist(),
+            "standardized": standardized.tolist(),
+            "indices": list(range(len(original))),
+            "stats": {
+                "original_min": float(min_val),
+                "original_max": float(max_val),
+                "original_mean": float(mean_val),
+                "original_std": float(std_val)
+            }
+        }
+    except Exception as e:
+        logger.error(f"Normalization visualization error: {e}")
+        return JSONResponse(status_code=500, content={"error": True, "message": str(e)})
+
 @app.get("/anomalies")
 async def get_anomalies():
     try:
@@ -303,4 +554,4 @@ app.mount("/static", StaticFiles(directory="frontend"), name="static")
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8001)

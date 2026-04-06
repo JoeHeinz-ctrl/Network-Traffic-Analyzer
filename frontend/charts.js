@@ -81,12 +81,14 @@ async function loadAllVisualizations() {
     // Show initial loading states
     showChartLoading('traffic-chart', '🌊 Loading traffic data...');
     showChartLoading('heatmap-chart', '🔥 Loading heatmap...');
+    showChartLoading('normalization-chart', '📊 Loading normalization...');
     showChartLoading('pca-chart', '🎯 Loading PCA analysis...');
     showChartLoading('frequency-chart', '📡 Loading frequency analysis...');
     showChartLoading('anomaly-chart', '⚠️ Loading anomaly detection...');
     
     // Load all visualizations immediately (no delays)
     loadTrafficVisualization();
+    loadNormalizationVisualization();
     loadPCAVisualization();
     loadFrequencyVisualization();
     loadAnomalyVisualization();
@@ -244,6 +246,111 @@ async function loadTrafficVisualization() {
         console.error('Error loading traffic visualization:', error);
         document.getElementById('traffic-chart').innerHTML = '<div class="chart-error">❌ Failed to load traffic data</div>';
         document.getElementById('heatmap-chart').innerHTML = '<div class="chart-error">❌ Failed to load heatmap</div>';
+    }
+}
+
+async function loadNormalizationVisualization() {
+    try {
+        updateLoadingMessage('normalization-chart', '📊 Computing transformations...');
+        const response = await fetch('/normalization');
+        
+        if (response.status === 404) {
+            document.getElementById('normalization-chart').innerHTML = `
+                <div class="chart-no-data">
+                    <div class="no-data-icon">📊</div>
+                    <div class="no-data-title">No Data Available</div>
+                    <div class="no-data-message">Upload a CSV file to see normalization</div>
+                    <a href="/" class="no-data-button">Upload Data</a>
+                </div>
+            `;
+            return;
+        }
+        
+        const data = await response.json();
+        
+        const trace1 = {
+            x: data.indices,
+            y: data.original,
+            mode: 'lines+markers',
+            name: 'Original Data',
+            line: {
+                color: '#ef4444',
+                width: 2
+            },
+            marker: {
+                size: 4,
+                color: '#ef4444'
+            },
+            hovertemplate: '<b>Original:</b> %{y:.2f}<extra></extra>'
+        };
+        
+        const trace2 = {
+            x: data.indices,
+            y: data.normalized,
+            mode: 'lines+markers',
+            name: 'Min-Max Normalized',
+            line: {
+                color: '#10b981',
+                width: 2
+            },
+            marker: {
+                size: 4,
+                color: '#10b981'
+            },
+            hovertemplate: '<b>Normalized:</b> %{y:.3f}<extra></extra>'
+        };
+        
+        const trace3 = {
+            x: data.indices,
+            y: data.standardized,
+            mode: 'lines+markers',
+            name: 'Z-Score Standardized',
+            line: {
+                color: '#1e90ff',
+                width: 2
+            },
+            marker: {
+                size: 4,
+                color: '#1e90ff'
+            },
+            hovertemplate: '<b>Standardized:</b> %{y:.3f}<extra></extra>'
+        };
+        
+        const layout = {
+            ...plotlyTheme,
+            title: {
+                text: `Linear Transformations Applied<br><sub>Original: [${data.stats.original_min.toFixed(0)}, ${data.stats.original_max.toFixed(0)}] → Normalized: [0, 1] | Standardized: μ=0, σ=1</sub>`,
+                font: { size: 16, color: '#fff' }
+            },
+            xaxis: {
+                ...plotlyTheme.xaxis,
+                title: 'Data Point Index',
+                showgrid: true
+            },
+            yaxis: {
+                ...plotlyTheme.yaxis,
+                title: 'Value',
+                showgrid: true
+            },
+            hovermode: 'x unified',
+            showlegend: true,
+            legend: {
+                x: 0.02,
+                y: 0.98,
+                bgcolor: 'rgba(30, 41, 59, 0.8)',
+                bordercolor: 'rgba(99, 102, 241, 0.3)',
+                borderwidth: 1
+            }
+        };
+        
+        document.getElementById('normalization-chart').innerHTML = '';
+        Plotly.newPlot('normalization-chart', [trace1, trace2, trace3], layout, {
+            responsive: true,
+            displayModeBar: true
+        });
+    } catch (error) {
+        console.error('Error loading normalization visualization:', error);
+        document.getElementById('normalization-chart').innerHTML = '<div class="chart-error">❌ Failed to load normalization visualization</div>';
     }
 }
 

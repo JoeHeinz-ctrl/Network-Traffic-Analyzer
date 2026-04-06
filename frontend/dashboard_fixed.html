@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard - Network Traffic Analysis</title>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <link rel="stylesheet" href="/style.css?v=5">
+</head>
+<body>
+    <div class="container">
+        <!-- Header with Theme Controls -->
+        <div class="dashboard-header">
+            <div>
+                <div class="logo">
+                    <div class="logo-icon">NT</div>
+                </div>
+                <h1>Analytics Dashboard</h1>
+                <p class="subtitle" id="dashboardSubtitle">Real-time Mathematical Analysis & Anomaly Detection</p>
+            </div>
+            <a href="/" class="nav-link">← Upload New Data</a>
+        </div>
+        
+        <!-- Stats Grid -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-label">Total Traffic Records</div>
+                <div class="stat-value" id="totalRecords">-</div>
+                <div class="stat-change positive">↑ Live Data</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Anomalies Detected</div>
+                <div class="stat-value" id="anomalyCount">-</div>
+                <div class="stat-change negative" id="anomalyChange">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Model Accuracy (R²)</div>
+                <div class="stat-value" id="modelAccuracy">-</div>
+                <div class="stat-change positive">Least Squares</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">PCA Variance</div>
+                <div class="stat-value" id="pcaVariance">-</div>
+                <div class="stat-change positive">2 Components</div>
+            </div>
+        </div>
+        
+        <!-- CO1: PDE Smoothing - SIDE BY SIDE LAYOUT -->
+        <div class="co-section">
+            <div class="co-header">
+                <span class="co-badge">CO1</span>
+                <h2>Partial Differential Equations (PDE)</h2>
+            </div>
+            
+            <div class="co-layout-horizontal">
+                <div class="math-panel-left">
+                    <h3>📐 Mathematical Foundation</h3>
+                    <p><strong>Application:</strong> Gaussian filtering for noise reduction using heat diffusion equations</p>
+                    
+                    <div class="formula-card">
+                        <div class="formula-label">HEAT EQUATION:</div>
+                        <div class="formula-text">∂u/∂t = α∇²u</div>
+                        <div class="formula-note">where u(x,t) is traffic intensity, α is diffusion coefficient</div>
+                    </div>
+                    
+                    <div class="formula-card">
+                        <div class="formula-label">GAUSSIAN KERNEL:</div>
+                        <div class="formula-text">G(x,y,σ) = (1/2πσ²)e^(-(x²+y²)/2σ²)</div>
+                        <div class="formula-note">Applied with σ = 1.5 for optimal smoothing</div>
+                    </div>
+                    
+                    <div class="results-box">
+                        <div class="result-row">
+                            <span>Smoothing Method:</span>
+                            <strong>Gaussian Convolution</strong>
+                        </div>
+                        <div class="result-row">
+                            <span>Noise Reduction:</span>
+                            <strong>~40-60%</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="charts-panel-right">
+                    <div class="chart-box">
+                        <h4>🌊 Traffic Over Time (PDE Smoothing)</h4>
+                        <div id="traffic-chart" class="chart-area"></div>
+                    </div>
+                    <div class="chart-box">
+                        <h4>🔥 Traffic Intensity Heatmap</h4>
+                        <div id="heatmap-chart" class="chart-area"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- CO2: Linear Transformations - VERTICAL STACKED LAYOUT -->
+        <div class="co-section">
+            <div class="co-header">
+                <span class="co-badge">CO2</span>
+                <h2>Linear Transformations</h2>
+            </div>
+            
+            <div class="co-layout-vertical">
+                <div class="math-panel-top">
+                    <h3>📐 Mathematical Foundation</h3>
+                    <p><strong>Application:</strong> Feature normalization and scaling for uniform data representation</p>
+                    
+                    <div class="formulas-horizontal">
+                        <div class="formula-card">
+                            <div class="formula-label">MIN-MAX NORMALIZATION:</div>
+                            <div class="formula-text">x' = (x - x_min) / (x_max - x_min)</div>
+                            <div class="formula-note">Maps features to [0, 1] range</div>
+                        </div>
+                        
+                        <div class="formula-card">
+                            <div class="formula-label">Z-SCORE STANDARDIZATION:</div>
+                            <div class="formula-text">z = (x - μ) / σ</div>
+                            <div class="formula-note">Centers data with mean=0, std=1</div>
+                        </div>
+                        
+                        <div class="formula-card">
+                            <div class="formula-label">TRANSFORMATION MATRIX:</div>
+                            <div class="formula-text">T: ℝⁿ → ℝⁿ</div>
+                            <div class="formula-note">Linear map preserving vector space structure</div>
+                        </div>
+                    </div>
+                    
+                    <div class="results-box-horizontal">
+                        <div class="result-row">
+                            <span>Features Normalized:</span>
+                            <strong>packet_size, protocol, timestamp</strong>
+                        </div>
+                        <div class="result-row">
+                            <span>Method:</span>
+                            <strong>Min-Max + Z-Score Standardization</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="charts-panel-bottom">
+                    <div class="chart-box">
+                        <h4>📊 Before/After Normalization Comparison</h4>
+                        <div id="normalization-chart" class="chart-area"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- CO3: PCA -->
+        <div class="co-section">
+            <div class="co-header">
+                <span class="co-badge">CO3</span>
+                <h2>Orthonormal Bases & Inner Product (PCA)</h2>
+            </div>
+            
+            <div class="co-layout">
+                <div class="math-panel">
+                    <h3>Mathematical Foundation</h3>
+                    <p><strong>Application:</strong> Principal Component Analysis for dimensionality reduction</p>
+                    
+                    <div class="formula-card">
+                        <div class="formula-label">Covariance Matrix:</div>
+                        <div class="formula-text">Σ = (1/n)X^T X</div>
+                        <div class="formula-note">Captures feature correlations</div>
+                    </div>
+                    
+                    <div class="formula-card">
+                        <div class="formula-label">Eigenvalue Decomposition:</div>
+                        <div class="formula-text">Σv = λv</div>
+                        <div class="formula-note">Eigenvectors form orthonormal basis</div>
+                    </div>
+                    
+                    <div class="formula-card">
+                        <div class="formula-label">PCA Projection:</div>
+                        <div class="formula-text">Z = XW, where W = [v₁, v₂]</div>
+                        <div class="formula-note">Projects to 2D principal components</div>
+                    </div>
+                    
+                    <div class="results-box">
+                        <div class="result-row">
+                            <span>Variance Explained:</span>
+                            <strong id="pcaVarianceExplained">-</strong>
+                        </div>
+                        <div class="result-row">
+                            <span>Dimensions:</span>
+                            <strong>n → 2 (reduction)</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="charts-panel single">
+                    <div class="chart-box">
+                        <h4>🎯 PCA 2D Projection</h4>
+                        <div id="pca-chart" class="chart-area"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- CO4: FFT -->
+        <div class="co-section">
+            <div class="co-header">
+                <span class="co-badge">CO4</span>
+                <h2>Laplace Transform & Frequency Analysis</h2>
+            </div>
+            
+            <div class="co-layout">
+                <div class="math-panel">
+                    <h3>Mathematical Foundation</h3>
+                    <p><strong>Application:</strong> Fast Fourier Transform for burst detection in frequency domain</p>
+                    
+                    <div class="formula-card">
+                        <div class="formula-label">Discrete Fourier Transform:</div>
+                        <div class="formula-text">X(k) = Σ x(n)e^(-i2πkn/N)</div>
+                        <div class="formula-note">Converts time series to frequency spectrum</div>
+                    </div>
+                    
+                    <div class="formula-card">
+                        <div class="formula-label">Power Spectral Density:</div>
+                        <div class="formula-text">P(f) = |X(f)|²</div>
+                        <div class="formula-note">Identifies dominant frequencies</div>
+                    </div>
+                    
+                    <div class="results-box">
+                        <div class="result-row">
+                            <span>Algorithm:</span>
+                            <strong>FFT (O(n log n))</strong>
+                        </div>
+                        <div class="result-row">
+                            <span>Top Frequencies:</span>
+                            <strong id="topFrequencies">-</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="charts-panel single">
+                    <div class="chart-box">
+                        <h4>📡 Frequency Spectrum (FFT)</h4>
+                        <div id="frequency-chart" class="chart-area"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- CO5: Least Squares -->
+        <div class="co-section">
+            <div class="co-header">
+                <span class="co-badge">CO5</span>
+                <h2>Least Squares Method</h2>
+            </div>
+            
+            <div class="co-layout">
+                <div class="math-panel">
+                    <h3>Mathematical Foundation</h3>
+                    <p><strong>Application:</strong> Linear regression for baseline prediction and anomaly detection</p>
+                    
+                    <div class="formula-card">
+                        <div class="formula-label">Normal Equations:</div>
+                        <div class="formula-text">β = (X^T X)^(-1) X^T y</div>
+                        <div class="formula-note">Optimal parameters minimizing squared error</div>
+                    </div>
+                    
+                    <div class="formula-card">
+                        <div class="formula-label">Prediction Model:</div>
+                        <div class="formula-text">ŷ = Xβ = β₀ + β₁x</div>
+                        <div class="formula-note">Linear baseline for traffic patterns</div>
+                    </div>
+                    
+                    <div class="formula-card">
+                        <div class="formula-label">Anomaly Detection:</div>
+                        <div class="formula-text">|y - ŷ| > k·σ</div>
+                        <div class="formula-note">Threshold k=2 for 95% confidence</div>
+                    </div>
+                    
+                    <div class="results-box">
+                        <div class="result-row">
+                            <span>R² Score:</span>
+                            <strong id="rSquaredValue">-</strong>
+                        </div>
+                        <div class="result-row">
+                            <span>Anomalies Found:</span>
+                            <strong id="anomaliesFound">-</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="charts-panel single">
+                    <div class="chart-box">
+                        <h4>⚠️ Anomaly Detection (Least Squares)</h4>
+                        <div id="anomaly-chart" class="chart-area"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    <script src="/charts.js?v=5"></script>
+</body>
+</html>
